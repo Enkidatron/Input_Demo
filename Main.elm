@@ -174,7 +174,7 @@ view model =
         [ viewInput "Name" "text" model.input.nameInput SetInputName
         , viewInput "Age" "number" model.input.ageInput SetInputAge
         , viewFeatureBlock model.input
-        , button [ onClick AddPerson ] [ text "Add Person" ]
+        , button [ onClick AddPerson, disabled <| shouldDisableButton model.input ] [ text "Add Person" ]
         , div [] (List.map viewPerson model.people)
         ]
 
@@ -228,3 +228,16 @@ viewPerson person =
         , text " Feature: "
         , text <| toString person.feature
         ]
+
+
+shouldDisableButton : InputBlock -> Bool
+shouldDisableButton block =
+    case ( block.nameInput, block.ageInput, block.useSimple, block.simpleInput, block.complexInput1, block.complexInput2 ) of
+        ( ValidInput _ _, ValidInput _ _, True, ValidInput _ _, _, _ ) ->
+            False
+
+        ( ValidInput _ _, ValidInput _ _, False, _, ValidInput _ _, ValidInput _ _ ) ->
+            False
+
+        _ ->
+            True
