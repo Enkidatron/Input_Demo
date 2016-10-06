@@ -231,8 +231,8 @@ viewPerson person =
 
 
 shouldDisableButton : InputBlock -> Bool
-shouldDisableButton block =
-    case ( block.nameInput, block.ageInput, block.useSimple, block.simpleInput, block.complexInput1, block.complexInput2 ) of
+shouldDisableButton { nameInput, ageInput, useSimple, simpleInput, complexInput1, complexInput2 } =
+    case ( nameInput, ageInput, useSimple, simpleInput, complexInput1, complexInput2 ) of
         ( ValidInput _ _, ValidInput _ _, True, ValidInput _ _, _, _ ) ->
             False
 
