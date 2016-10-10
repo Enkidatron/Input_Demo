@@ -119,22 +119,22 @@ updateInput : InputMsg -> InputBlock -> InputBlock
 updateInput msg input =
     case msg of
         SetInputName text ->
-            { input | nameInput = (validateInput text isNotBlank) }
+            { input | nameInput = validateInput text isNotBlank }
 
         SetInputAge text ->
-            { input | ageInput = (validateInput text isNotNegative) }
+            { input | ageInput = validateInput text isNotNegative }
 
         SetUseSimple bool ->
             { input | useSimple = bool }
 
         SetInputSimple text ->
-            { input | simpleInput = (validateInput text isNotBlank) }
+            { input | simpleInput = validateInput text isNotBlank }
 
         SetInputComplex1 text ->
-            { input | complexInput1 = (validateInput text isNotBlank) }
+            { input | complexInput1 = validateInput text isNotBlank }
 
         SetInputComplex2 text ->
-            { input | complexInput2 = (validateInput text isNotNegative) }
+            { input | complexInput2 = validateInput text isNotNegative }
 
 
 
