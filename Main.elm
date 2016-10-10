@@ -65,8 +65,7 @@ model =
 
 
 type Msg
-    = NoOp
-    | SetInputName String
+    = SetInputName String
     | SetInputAge String
     | SetUseSimple Bool
     | SetInputSimple String
@@ -82,9 +81,6 @@ type Msg
 update : Msg -> Model -> Model
 update msg ({ input } as model) =
     case msg of
-        NoOp ->
-            model
-
         SetInputName text ->
             { model | input = { input | nameInput = (validateInput text isNotBlank) } }
 
