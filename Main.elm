@@ -65,14 +65,17 @@ model =
 
 
 type Msg
-    = NoOp
-    | SetInputName String
+    = InputMsg InputMsg
+    | AddPerson
+
+
+type InputMsg
+    = SetInputName String
     | SetInputAge String
     | SetUseSimple Bool
     | SetInputSimple String
     | SetInputComplex1 String
     | SetInputComplex2 String
-    | AddPerson
 
 
 
@@ -82,26 +85,8 @@ type Msg
 update : Msg -> Model -> Model
 update msg ({ input } as model) =
     case msg of
-        NoOp ->
-            model
-
-        SetInputName text ->
-            { model | input = { input | nameInput = (validateInput text isNotBlank) } }
-
-        SetInputAge text ->
-            { model | input = { input | ageInput = (validateInput text isNotNegative) } }
-
-        SetUseSimple bool ->
-            { model | input = { input | useSimple = bool } }
-
-        SetInputSimple text ->
-            { model | input = { input | simpleInput = (validateInput text isNotBlank) } }
-
-        SetInputComplex1 text ->
-            { model | input = { input | complexInput1 = (validateInput text isNotBlank) } }
-
-        SetInputComplex2 text ->
-            { model | input = { input | complexInput2 = (validateInput text isNotNegative) } }
+        InputMsg submsg ->
+            { model | input = updateInput submsg model.input }
 
         AddPerson ->
             let
@@ -128,6 +113,28 @@ update msg ({ input } as model) =
                     | people = model.people ++ newPerson
                     , input = newInput
                 }
+
+
+updateInput : InputMsg -> InputBlock -> InputBlock
+updateInput msg input =
+    case msg of
+        SetInputName text ->
+            { input | nameInput = validateInput text isNotBlank }
+
+        SetInputAge text ->
+            { input | ageInput = validateInput text isNotNegative }
+
+        SetUseSimple bool ->
+            { input | useSimple = bool }
+
+        SetInputSimple text ->
+            { input | simpleInput = validateInput text isNotBlank }
+
+        SetInputComplex1 text ->
+            { input | complexInput1 = validateInput text isNotBlank }
+
+        SetInputComplex2 text ->
+            { input | complexInput2 = validateInput text isNotNegative }
 
 
 
@@ -171,15 +178,18 @@ isNotNegative text =
 view : Model -> Html Msg
 view model =
     div []
-        [ viewInput "Name" "text" model.input.nameInput SetInputName
-        , viewInput "Age" "number" model.input.ageInput SetInputAge
-        , viewFeatureBlock model.input
+        [ div []
+            [ viewInput "Name" "text" model.input.nameInput SetInputName
+            , viewInput "Age" "number" model.input.ageInput SetInputAge
+            , viewFeatureBlock model.input
+            ]
+            |> App.map InputMsg
         , button [ onClick AddPerson, disabled <| shouldDisableButton model.input ] [ text "Add Person" ]
         , div [] (List.map viewPerson model.people)
         ]
 
 
-viewInput : String -> String -> Input a -> (String -> Msg) -> Html Msg
+viewInput : String -> String -> Input a -> (String -> msg) -> Html msg
 viewInput label inputtype input' msg =
     let
         ( str, errorText ) =
@@ -200,7 +210,7 @@ viewInput label inputtype input' msg =
             ]
 
 
-viewFeatureBlock : InputBlock -> Html Msg
+viewFeatureBlock : InputBlock -> Html InputMsg
 viewFeatureBlock inputBlock =
     let
         inputs =
