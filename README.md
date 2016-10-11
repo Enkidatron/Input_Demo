@@ -2,7 +2,7 @@ Input_Demo
 
 This illustrates the use of `Input a` types for tracking validated input in Elm, as I write about [here](http://www.mechanicaldruid.com/update-to-input-tracking-in-elm/). 
 
-I'd like to thank @jckdrpr from elm-slack for the tip about destructuring the model in the update function, so that I can easily update a nested record. This is very useful.  
+I'd like to thank @jckdrpr from elm-slack for the tip about destructuring the model in the update function, even though I'm not using that anymore. 
 
 Points that I want to highlight include:
 * That we can display different inputs based on application state

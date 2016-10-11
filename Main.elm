@@ -83,7 +83,7 @@ type InputMsg
 
 
 update : Msg -> Model -> Model
-update msg ({ input } as model) =
+update msg model =
     case msg of
         InputMsg submsg ->
             { model | input = updateInput submsg model.input }
@@ -107,7 +107,7 @@ update msg ({ input } as model) =
                             ( [ Person name age feature ], blankInputBlock )
 
                         _ ->
-                            ( [], input )
+                            ( [], model.input )
             in
                 { model
                     | people = model.people ++ newPerson
